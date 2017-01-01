@@ -399,7 +399,7 @@ sub Auerswald_Set($@)
   }
   
   if ($cmd eq 'robinson') {
-      my ($listID,$action,$number,@name) = @args; #catch remaining args as @name
+      my ($listID,$action,$number,@names) = @args; #catch remaining args as @names
     if (defined($listID) && defined($action) && defined($number) && $number ne "" && ($action eq "add" || $action eq "del")) {
       #check if listID exists
       my $listIDfound = 0;
@@ -438,9 +438,9 @@ sub Auerswald_Set($@)
       }
       
       if ($action eq "add") {
-        if (defined @name) {
+        if (@names) {
           #POST sperrwerkekonfig_save?kommend=0&werkeId=252 => rufnummer=1234567789&name=asdasdasdasd
-          $sendData = "rufnummer=".$number."&name=".join(" ",@name);
+          $sendData = "rufnummer=".$number."&name=".join(" ",@names);
           
           $url = $baseurl."sperrwerkekonfig_save?kommend=0&werkeId=".$listID;
           $method = "POST";
@@ -453,7 +453,7 @@ sub Auerswald_Set($@)
             data => $sendData,
           });    
 
-  #        Log3 $name, 3, Dumper $data;
+  #        Log3 $names, 3, Dumper $data;
           #return $data;
           return "error: Cannot add robinson number: ".$err.$data if ($err ne "" || $data eq "" || index($data, 'Access Error') > 0);
           return "Successfully added robinson number ".$number;
